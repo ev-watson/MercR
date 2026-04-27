@@ -104,4 +104,6 @@ bash scripts/run_eval.sh
 
 ## AI Disclosure
 
-AI-assisted tools (Claude, Anthropic) were used during development of this repository.
+AI-assisted tools (Claude, Codex) were used during development of this repository.
+
+This README was generated in part with AI assistance. While it has been reviewed for accuracy, it may contain errors, omissions, or outdated information; users should contact etwatson@ucsd.edu for any questions.
