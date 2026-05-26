@@ -1,9 +1,12 @@
-import plotly
 import torch
 
 import config
 
-plotly.io.templates.default = 'simple_white'
+try:
+    import plotly
+    plotly.io.templates.default = 'simple_white'
+except ImportError:
+    plotly = None
 torch.set_default_dtype(torch.float64) if not config.MAC else torch.set_default_dtype(torch.float32)
 
 from .torch_utils import (
@@ -50,6 +53,11 @@ from .losses import (
 from .logging_utils import (
     print_err,
     print_block
+)
+from .checkpoints import (
+    checkpoint_architecture,
+    assert_checkpoint_architecture,
+    load_checkpoint_for_model,
 )
 from .misc import (
     clear_local_ckpt_files,

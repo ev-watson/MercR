@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=multihopt
-#SBATCH --account=csd886
+#SBATCH --account=csd969
 #SBATCH --partition=gpu
 #SBATCH --constraint="lustre"
 #SBATCH --array=0,1,2,3

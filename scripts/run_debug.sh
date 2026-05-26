@@ -1,14 +1,14 @@
 #!/bin/bash
-#SBATCH --job-name=h-debug
-#SBATCH --account=csd886
+#SBATCH --job-name=t-debug
+#SBATCH --account=csd969
 #SBATCH --partition=gpu-debug
 #SBATCH --constraint="lustre"
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=10
-#SBATCH --mem=93G
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=90G
 #SBATCH --gpus=2
-#SBATCH --time=00:30:00
+#SBATCH --time=00:29:00
 #SBATCH --output=script_logs/%x.o%j.txt
 #SBATCH --error=script_logs/%x.e%j.txt
 #SBATCH --mail-type=BEGIN,END,FAIL,REQUEUE,TIME_LIMIT_90
@@ -25,6 +25,6 @@ echo "Activating virtual environment..."
 source .venv/bin/activate || { echo "Failed to activate virtual environment"; exit 1; }
 
 echo "Starting python script..."
-srun --unbuffered python hopt.py -o nadam || { echo "Python script failed"; exit 1; }
+srun --unbuffered python train.py || { echo "Python script failed"; exit 1; }
 
 echo "Job completed."

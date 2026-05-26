@@ -6,7 +6,7 @@ from scipy.integrate import solve_ivp
 
 import config
 from models import MPNN
-from utils import fully_connected_edges, print_block
+from utils import fully_connected_edges, load_checkpoint_for_model, print_block
 
 
 def newton_force(r_vec, gm=config.GM_SUN):
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Orbit propagator using Newton or learned force law")
     parser.add_argument('--mode', choices=['newton', 'gnn'], default='newton',
                         help='Force law: analytic Newton or trained MPNN.')
-    parser.add_argument('--ckpt', type=str, default='tlogs/checkpoints/mpnn_final.ckpt',
+    parser.add_argument('--ckpt', type=str, default=config.MPNN_CHECKPOINT_FILE,
                         help='Checkpoint path for --mode gnn')
     parser.add_argument('--scaler', type=str, default=config.SCALER_FILE,
                         help='Scaler bundle path used during training (None to skip)')
@@ -111,7 +111,7 @@ if __name__ == "__main__":
     if args.mode == 'newton':
         force_fn = lambda r, v: newton_force(r)
     else:
-        model = MPNN.load_from_checkpoint(args.ckpt)
+        model = load_checkpoint_for_model(MPNN, args.ckpt)
         model.eval()
         if args.scaler:
             config.SCALER_FILE = args.scaler

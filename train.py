@@ -1,9 +1,11 @@
 import torch.optim as optim
+from pathlib import Path
 from lightning.pytorch import Trainer, seed_everything
 from lightning.pytorch.callbacks import EarlyStopping, LearningRateMonitor
 from lightning.pytorch.loggers import TensorBoardLogger
 
 from data_construction import *
+from utils import assert_checkpoint_architecture, print_block
 
 seed = config.SEED if config.SEED else np.random.randint(1, 10000)
 print_block(f"SEED: {seed}")
@@ -70,3 +72,10 @@ trainer = Trainer(
 trainer.fit(model, datamodule=data_module)
 
 trainer.test(model, datamodule=data_module)
+
+if trainer.is_global_zero:
+    checkpoint_path = Path(config.MPNN_CHECKPOINT_FILE)
+    checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
+    trainer.save_checkpoint(checkpoint_path)
+    assert_checkpoint_architecture(checkpoint_path, expected='mpnn')
+    print_block(f"Saved current MPNN checkpoint: {checkpoint_path}")

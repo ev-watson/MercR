@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=eval
-#SBATCH --account=csd886
+#SBATCH --account=csd969
 #SBATCH --partition=gpu-debug
 #SBATCH --constraint="lustre"
 #SBATCH --nodes=1

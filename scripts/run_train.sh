@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=train
-#SBATCH --account=csd886
+#SBATCH --account=csd969
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --ntasks=1

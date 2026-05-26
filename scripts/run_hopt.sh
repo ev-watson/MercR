@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=hopt
-#SBATCH --account=csd886
+#SBATCH --account=csd969
 #SBATCH --partition=gpu
 #SBATCH --constraint="lustre"
 #SBATCH --nodes=1

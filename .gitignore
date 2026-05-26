@@ -40,6 +40,7 @@ scripts/get_ckpts.sh
 scripts/cleanup.sh
 media/
 backups/
+notebooks/
 
 # result text files (regenerable)
 results_*.txt

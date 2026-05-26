@@ -104,7 +104,7 @@ def build_graph_snapshots(merc_csv,
                    file_path=merc_csv,
                    nrows=nrows,
                    step=step,
-                   chunk_size=chunk_size)  # [T, 7] in seconds (decimal years) and m
+                   chunk_size=chunk_size)  # [T, 7]: decimal years, meters, meters/second
     merc_mov = get_movements(merc)  # [T, 10] -> [t, x, y, z, vx, vy, vz, ax, ay, az]
     T = merc_mov.shape[0]
 
@@ -138,7 +138,12 @@ def build_graph_snapshots(merc_csv,
 
 def load_np(data_name, file_path=None, nrows=None, step=1, reload=True, chunk_size=400000):
     """
-    Loads Horizons data np file and turns into meters and decimal years
+    Loads Horizons data and converts the time / vector columns.
+
+    Horizons vector CSVs are expected in [JDTDB, X, Y, Z, VX, VY, VZ] with positions in km
+    and velocities in km/s. This function converts JDTDB to decimal Julian years and every
+    vector component to SI distance units: positions become meters and velocities become m/s.
+
     :param data_name: str, Name of the file to save or load.
     :param file_path: str, Path to the CSV file containing the data.
     :param nrows: int, Number of rows to load.

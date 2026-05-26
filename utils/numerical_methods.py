@@ -3,13 +3,22 @@ from numba import njit, prange
 from scipy.interpolate import UnivariateSpline
 
 
+SECONDS_PER_JULIAN_YEAR = 365.25 * 24 * 60 * 60
+
+
 def get_movements(data):
     """
-    Spline differentiate to get accelerations
-    ONLY FOR CARTESIAN
+    Spline differentiate to get velocities / accelerations.
+
+    ONLY FOR CARTESIAN. The active Horizons loader converts the first column from Julian
+    dates to decimal Julian years and converts positions / velocities to SI distance units.
+    Spline derivatives with respect to that time coordinate therefore need explicit
+    year-to-second conversion to keep velocity in m/s and acceleration in m/s^2.
 
     :param data: array-like of shape (n_samples, 4 or 7) with column order [t, x, y, z, vx, vy, vz]
+        where t is decimal Julian years, x/y/z are meters, and optional vx/vy/vz are m/s.
     :return: array-like of shape (n_samples, 10) with column order [t, x, y, z, vx, vy, vz, ax, ay, az]
+        where t is decimal Julian years, x/y/z are meters, vx/vy/vz are m/s, and ax/ay/az are m/s^2.
     """
     t = data[..., 0]
     x1, x2, x3 = data[..., 1], data[..., 2], data[..., 3]
@@ -22,15 +31,21 @@ def get_movements(data):
         spline2 = UnivariateSpline(t, v2, k=3, s=0)
         spline3 = UnivariateSpline(t, v3, k=3, s=0)
 
-        a1, a2, a3 = spline1.derivative(n=1)(t), spline2.derivative(n=1)(t), spline3.derivative(n=1)(t)
+        a1 = spline1.derivative(n=1)(t) / SECONDS_PER_JULIAN_YEAR
+        a2 = spline2.derivative(n=1)(t) / SECONDS_PER_JULIAN_YEAR
+        a3 = spline3.derivative(n=1)(t) / SECONDS_PER_JULIAN_YEAR
 
     else:
         spline1 = UnivariateSpline(t, x1, k=3, s=0)
         spline2 = UnivariateSpline(t, x2, k=3, s=0)
         spline3 = UnivariateSpline(t, x3, k=3, s=0)
 
-        v1, v2, v3 = spline1.derivative(n=1)(t), spline2.derivative(n=1)(t), spline3.derivative(n=1)(t)
-        a1, a2, a3 = spline1.derivative(n=2)(t), spline2.derivative(n=2)(t), spline3.derivative(n=2)(t)
+        v1 = spline1.derivative(n=1)(t) / SECONDS_PER_JULIAN_YEAR
+        v2 = spline2.derivative(n=1)(t) / SECONDS_PER_JULIAN_YEAR
+        v3 = spline3.derivative(n=1)(t) / SECONDS_PER_JULIAN_YEAR
+        a1 = spline1.derivative(n=2)(t) / SECONDS_PER_JULIAN_YEAR ** 2
+        a2 = spline2.derivative(n=2)(t) / SECONDS_PER_JULIAN_YEAR ** 2
+        a3 = spline3.derivative(n=2)(t) / SECONDS_PER_JULIAN_YEAR ** 2
 
     return np.column_stack([t, x1, x2, x3, v1, v2, v3, a1, a2, a3])
 

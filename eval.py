@@ -24,7 +24,11 @@ parser.add_argument('--skip-stage', '-s', type=str, default='none',
 args = parser.parse_args()
 
 if args.ckpt:
-    model = config.retrieve('model').load_from_checkpoint(args.ckpt)
+    model_cls = config.retrieve('model')
+    if config.TYPE == 'gnn':
+        model = load_checkpoint_for_model(model_cls, args.ckpt)
+    else:
+        model = model_cls.load_from_checkpoint(args.ckpt)
     print_block("MODEL LOADED FROM CHECKPOINT")
 else:
     model = config.retrieve('model')()

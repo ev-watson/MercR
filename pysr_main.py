@@ -8,7 +8,7 @@ import sympy as sp
 
 import config
 from models import MPNN
-from utils import ScalerBundle, print_block, gnn_test
+from utils import ScalerBundle, load_checkpoint_for_model, print_block, gnn_test
 
 from pysr import PySRRegressor
 
@@ -35,8 +35,8 @@ evaluation_file = pysr_dir + 'evaluation.txt'
 # expression for each active channel as a function of the source and destination node
 # features. Once those expressions are known, the full force law is the per-edge sum.
 
-ckpt = 'tlogs/checkpoints/mpnn_final.ckpt'
-gnnmodel = MPNN.load_from_checkpoint(ckpt)
+ckpt = config.MPNN_CHECKPOINT_FILE
+gnnmodel = load_checkpoint_for_model(MPNN, ckpt)
 
 print_block("RETRIEVING EDGE-FUNCTION ARTIFACTS")
 edge_inputs, messages, accel_target, accel_pred = gnn_test(

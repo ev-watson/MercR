@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=data_init
+#SBATCH --job-name=build_graph
 #SBATCH --account=csd969
 #SBATCH --partition=compute
 #SBATCH --constraint="lustre"
@@ -19,14 +19,10 @@ module load slurm
 module load cpu
 module load gcc/10.2.0
 
-objects=("merc" "earth")
-
-OBJECT=${objects[$SLURM_ARRAY_TASK_ID]}
-
 echo "Activating virtual environment..."
 source .venv/bin/activate || { echo "Failed to activate virtual environment"; exit 1; }
 
 echo "Starting Python script..."
-srun --unbuffered python data_init.py --object="$OBJECT" || { echo "Python script failed"; exit 1; }
+srun --unbuffered python -c "from utils import build_graph_snapshots; build_graph_snapshots('horizons.csv')" || { echo "Python script failed"; exit 1; }
 
 echo "Job completed."

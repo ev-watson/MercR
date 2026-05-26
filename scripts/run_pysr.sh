@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=SR
-#SBATCH --account=csd886
+#SBATCH --account=csd969
 #SBATCH --partition=compute
 #SBATCH --constraint="lustre"
 #SBATCH --nodes=1

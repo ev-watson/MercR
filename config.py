@@ -77,6 +77,8 @@ INTERP_FILE = f'{DATA_DIR}/interp_data.npy'               # interp-MLP file
 GRAPH_FILE = f'{DATA_DIR}/graph_data.npy'                 # MPNN file: shape [T, B, F]
 SCALER_FILE = f'{ARTIFACTS_DIR}/{TYPE}_scaler.pkl'        # None to turn off saving
 STATE_FILE = f'{ARTIFACTS_DIR}/model_state.pth'
+CHECKPOINT_DIR = 'tlogs/checkpoints'
+MPNN_CHECKPOINT_FILE = f'{CHECKPOINT_DIR}/mpnn_final.ckpt'
 
 ####################
 #   MAC SETTINGS   #
