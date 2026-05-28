@@ -2,6 +2,7 @@ import joblib
 import numpy as np
 import torch
 import torch.nn as nn
+from pathlib import Path
 from lightning.pytorch import LightningModule
 from lightning.pytorch.callbacks import Callback
 
@@ -143,6 +144,8 @@ class ScalerBundle:
 
     def dump(self, path=None):
         path = path if path is not None else config.SCALER_FILE
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
         joblib.dump({
             'input_scaler': self.input_scaler,
             'target_scaler': self.target_scaler,

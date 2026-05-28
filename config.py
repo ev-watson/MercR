@@ -1,4 +1,5 @@
 import inspect
+from sys import platform
 
 ####################
 #  BASIC SETTINGS  #
@@ -7,7 +8,7 @@ SEED = 42
 TYPE = 'gnn'
 ROTATIONAL_EQUIVARIANCE = False  # rotation augmentation on cartesian graph snapshots
 WINDOWED = False  # legacy: time-window MLP regime; not used by the graph network
-MAC = True
+MAC = platform == "darwin"
 
 ####################
 #   PHYSICS / SYS  #
